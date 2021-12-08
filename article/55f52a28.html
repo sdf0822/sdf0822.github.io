@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-touch-fullscreen" content="yes" />
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yilin10.tw","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1XEN07M68X"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-1XEN07M68X');
+</script>
+
+  <meta name="description" content="前言我自己在開發專案時都會有常用的方法與類別，但不同的專案就會需要複製檔案一次，很不方便，所以今天想來製作屬於自己的套件庫！">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IOS製作屬於自己的套件庫">
+<meta property="og:url" content="https://yilin10.tw/article/55f52a28.html">
+<meta property="og:site_name" content="yiLin Blog">
+<meta property="og:description" content="前言我自己在開發專案時都會有常用的方法與類別，但不同的專案就會需要複製檔案一次，很不方便，所以今天想來製作屬於自己的套件庫！">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://i.imgur.com/dN53peb.png">
+<meta property="og:image" content="https://i.imgur.com/AC2Rb2h.png">
+<meta property="og:image" content="https://i.imgur.com/gYc9h8a.png">
+<meta property="og:image" content="https://i.imgur.com/lo9Xg6i.png">
+<meta property="og:image" content="https://i.imgur.com/9wGrAwW.png">
+<meta property="og:image" content="https://i.imgur.com/KdwzqXO.png">
+<meta property="og:image" content="https://i.imgur.com/U9uCXtj.png">
+<meta property="og:image" content="https://i.imgur.com/gyXszo5.png">
+<meta property="og:image" content="https://i.imgur.com/7PprUtG.png">
+<meta property="og:image" content="https://i.imgur.com/7hXHOBq.png">
+<meta property="article:published_time" content="2021-11-02T20:26:13.000Z">
+<meta property="article:modified_time" content="2021-12-08T01:34:59.398Z">
+<meta property="article:author" content="Yi-Lin">
+<meta property="article:tag" content="xcode">
+<meta property="article:tag" content="ios">
+<meta property="article:tag" content="apple">
+<meta property="article:tag" content="Swift Package Manager">
+<meta property="article:tag" content="spm">
+<meta property="article:tag" content="cocoapods">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/dN53peb.png">
+
+<link rel="canonical" href="https://yilin10.tw/article/55f52a28.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-TW'
+  };
+</script>
+
+  <title>IOS製作屬於自己的套件庫 | yiLin Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1XEN07M68X"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-1XEN07M68X');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="yiLin Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">yiLin Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">歡迎來到我的部落格。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分類</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://yilin10.tw/article/55f52a28.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/myAvatar.png">
+      <meta itemprop="name" content="Yi-Lin">
+      <meta itemprop="description" content="歡迎來到我的部落格">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yiLin Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          IOS製作屬於自己的套件庫
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+
+              <time title="創建時間：2021-11-02 20:26:13" itemprop="dateCreated datePublished" datetime="2021-11-02T20:26:13+00:00">2021-11-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新於</span>
+                <time title="修改時間：2021-12-08 01:34:59" itemprop="dateModified" datetime="2021-12-08T01:34:59+00:00">2021-12-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/IOS/" itemprop="url" rel="index"><span itemprop="name">IOS</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="閱讀次數">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-users"></i>
+              </span>
+              <span class="post-meta-item-text">閱讀次數：</span>
+              <span class="firestore-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="https://i.imgur.com/dN53peb.png" alt="Image"></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我自己在開發專案時都會有常用的方法與類別，但不同的專案就會需要複製檔案一次，很不方便，所以今天想來製作屬於自己的套件庫！<span id="more"></span></p>
+<h2 id="Swift-Package-Manager"><a href="#Swift-Package-Manager" class="headerlink" title="Swift Package Manager"></a>Swift Package Manager</h2><h3 id="創建-Package"><a href="#創建-Package" class="headerlink" title="創建 Package"></a>創建 Package</h3><p><img src="https://i.imgur.com/AC2Rb2h.png" alt="Image">
+<img src="https://i.imgur.com/gYc9h8a.png" alt="Image"></p>
+<h3 id="編輯-Package-swift"><a href="#編輯-Package-swift" class="headerlink" title="編輯 Package.swift"></a>編輯 Package.swift</h3><ul>
+<li>在這裡我多加入了 ios 版本 與 swift 的版本 限制
+<img src="https://i.imgur.com/lo9Xg6i.png" alt="Image"></li>
+</ul>
+<h3 id="放入檔案"><a href="#放入檔案" class="headerlink" title="放入檔案"></a>放入檔案</h3><p>將你的檔案丟進 <code>Sources/套件名</code> 裡(檔案內的類別或方法需加上<strong>public</strong>，不然會無法呼叫到)
+<img src="https://i.imgur.com/9wGrAwW.png" alt="Image"></p>
+<h3 id="上傳至github"><a href="#上傳至github" class="headerlink" title="上傳至github"></a>上傳至<strong>github</strong></h3><ul>
+<li>然後 push 到 github (專案需公開)，這樣我們就完成了屬於自己的套件包了 👏，以後如果有不錯的程式就可以將它整理到自己的套件裡，好方便自己使用
+如需將套件包加入 Cocoapods 請繼續往下看</li>
+</ul>
+<h2 id="Cocoapods"><a href="#Cocoapods" class="headerlink" title="Cocoapods"></a>Cocoapods</h2><ul>
+<li>使你的套件可用於 <strong>Cocoapods</strong> 我們需要再加入幾個步驟</li>
+</ul>
+<h3 id="創建podspec檔"><a href="#創建podspec檔" class="headerlink" title="創建podspec檔"></a>創建<strong>podspec</strong>檔</h3><ul>
+<li>在你的套件包加入 <strong><u>套件名.podspec</u></strong></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Pod::Spec.new do |s|</span><br><span class="line">  s.name             = &#x27;ZYLKit稱&#x27; #套件名稱</span><br><span class="line">  s.version          = &#x27;0.1.0&#x27;  #套件名稱(如更新都需變更版本)</span><br><span class="line">  s.summary          = &#x27;一些好用的方法與封裝元件&#x27; #套件說明</span><br><span class="line">  s.homepage         = &#x27;https://github.com/sdf0822/ZYLKit&#x27; #git URL</span><br><span class="line">  s.license          = &#123; :type =&gt; &#x27;MIT&#x27;, :file =&gt; &#x27;LICENSE&#x27; &#125; #LICENSE(可使用github產生)</span><br><span class="line">  s.author           = &#123; &#x27;yiLin&#x27; =&gt; &#x27;sdf0822@gmail.com&#x27; &#125; #作者</span><br><span class="line">  s.source           = &#123; :git =&gt; &#x27;https://github.com/sdf0822/ZYLKit.git&#x27;, :tag =&gt; s.version &#125;</span><br><span class="line">  s.ios.deployment_target = &#x27;13.0&#x27;</span><br><span class="line">  s.swift_version = &#x27;5.0&#x27;</span><br><span class="line">  s.source_files = &#x27;Sources/ZYLKit/**/*&#x27;</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<h3 id="新增版號Tag"><a href="#新增版號Tag" class="headerlink" title="新增版號Tag"></a>新增版號Tag</h3><ul>
+<li>在專案裡新增一個版本號的 <strong>tag</strong> ，要和 podspec version 一樣，發佈到 github</li>
+</ul>
+<p><img src="https://i.imgur.com/KdwzqXO.png" alt="Image"></p>
+<h3 id="檢查是否有錯誤"><a href="#檢查是否有錯誤" class="headerlink" title="檢查是否有錯誤"></a>檢查是否有錯誤</h3><ul>
+<li>完成後 輸入<code>pod spec lint</code> ， 如有錯誤就一一排除</li>
+</ul>
+<p><img src="https://i.imgur.com/U9uCXtj.png" alt="Image"></p>
+<h3 id="檢查-session"><a href="#檢查-session" class="headerlink" title="檢查 session"></a>檢查 session</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod trunk me</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.imgur.com/gyXszo5.png" alt="Image"></p>
+<h3 id="驗證信箱"><a href="#驗證信箱" class="headerlink" title="驗證信箱"></a>驗證信箱</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod trunk register &quot;sdf0822@gmail.com&quot; &#x27;Chuang&#x27; --description=&#x27;imac&#x27;</span><br></pre></td></tr></table></figure>
+
+<h3 id="把專案推到-trunk"><a href="#把專案推到-trunk" class="headerlink" title="把專案推到 trunk"></a>把專案推到 trunk</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod trunk push ZYLKit.podspec</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.imgur.com/7PprUtG.png" alt="Image"></p>
+<p>這時候就可以去泡杯咖啡，等待官方回信，收到回信就可以使用 cocoapods 導入屬於你自己的套件了 🎉🎉</p>
+<p><img src="https://i.imgur.com/7hXHOBq.png" alt="Image"></p>
+<p><strong>附上我的套件連結</strong> <a target="_blank" rel="noopener" href="https://github.com/sdf0822/ZYLKit">github</a></p>
+
+        <div>
+  <script type="text/javascript">
+    document.write(
+      "<iframe scrolling='no' frameborder='0' style='height: 212px; width: 100%;' " + 
+      "sandbox='allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-storage-access-by-user-activation' " + 
+      "src='https://button.like.co/in/embed/sdf0822/button?referrer=" +
+      encodeURIComponent(location.href.split("?")[0].split("#")[0]) + "'></iframe>");
+  </script>
+</div>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/xcode/" rel="tag"><i class="fa fa-tag"></i> xcode</a>
+              <a href="/tags/ios/" rel="tag"><i class="fa fa-tag"></i> ios</a>
+              <a href="/tags/apple/" rel="tag"><i class="fa fa-tag"></i> apple</a>
+              <a href="/tags/Swift-Package-Manager/" rel="tag"><i class="fa fa-tag"></i> Swift Package Manager</a>
+              <a href="/tags/spm/" rel="tag"><i class="fa fa-tag"></i> spm</a>
+              <a href="/tags/cocoapods/" rel="tag"><i class="fa fa-tag"></i> cocoapods</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/article/f03c5f99.html" rel="prev" title="3款好用的IOS開發輔助工具">
+      <i class="fa fa-chevron-left"></i> 3款好用的IOS開發輔助工具
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Swift-Package-Manager"><span class="nav-number">2.</span> <span class="nav-text">Swift Package Manager</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%B5%E5%BB%BA-Package"><span class="nav-number">2.1.</span> <span class="nav-text">創建 Package</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B7%A8%E8%BC%AF-Package-swift"><span class="nav-number">2.2.</span> <span class="nav-text">編輯 Package.swift</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%BE%E5%85%A5%E6%AA%94%E6%A1%88"><span class="nav-number">2.3.</span> <span class="nav-text">放入檔案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8A%E5%82%B3%E8%87%B3github"><span class="nav-number">2.4.</span> <span class="nav-text">上傳至github</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cocoapods"><span class="nav-number">3.</span> <span class="nav-text">Cocoapods</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%B5%E5%BB%BApodspec%E6%AA%94"><span class="nav-number">3.1.</span> <span class="nav-text">創建podspec檔</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B0%E5%A2%9E%E7%89%88%E8%99%9FTag"><span class="nav-number">3.2.</span> <span class="nav-text">新增版號Tag</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AA%A2%E6%9F%A5%E6%98%AF%E5%90%A6%E6%9C%89%E9%8C%AF%E8%AA%A4"><span class="nav-number">3.3.</span> <span class="nav-text">檢查是否有錯誤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AA%A2%E6%9F%A5-session"><span class="nav-number">3.4.</span> <span class="nav-text">檢查 session</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A9%97%E8%AD%89%E4%BF%A1%E7%AE%B1"><span class="nav-number">3.5.</span> <span class="nav-text">驗證信箱</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%8A%E5%B0%88%E6%A1%88%E6%8E%A8%E5%88%B0-trunk"><span class="nav-number">3.6.</span> <span class="nav-text">把專案推到 trunk</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Yi-Lin"
+      src="/images/myAvatar.png">
+  <p class="site-author-name" itemprop="name">Yi-Lin</p>
+  <div class="site-description" itemprop="description">歡迎來到我的部落格</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/sdf0822" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;sdf0822" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:service@yilin10.tw" title="E-Mail → mailto:service@yilin10.tw"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yi-Lin</span>
+</div>
+  <div class="addthis_inline_share_toolbox">
+    <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=612c7eb5114f22eb" async="async"></script>
+  </div>
+
+        
+
+
+
+
+  <script src="https://www.gstatic.com/firebasejs/6.3.3/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.3.3/firebase-firestore.js"></script>
+  <script>
+    firebase.initializeApp({
+      apiKey   : 'AIzaSyDqE0BRxtNZMWXVsbebPpQVo5Le55l48rE',
+      projectId: 'gh-yilin-blog'
+    });
+
+    function getCount(doc, increaseCount) {
+      // IncreaseCount will be false when not in article page
+      return doc.get().then(d => {
+        var count = 0;
+        if (!d.exists) { // Has no data, initialize count
+          if (increaseCount) {
+            doc.set({
+              count: 1
+            });
+            count = 1;
+          }
+        } else { // Has data
+          count = d.data().count;
+          if (increaseCount) {
+            // If first view this article
+            doc.set({ // Increase count
+              count: count + 1
+            });
+            count++;
+          }
+        }
+
+        return count;
+      });
+    }
+
+    function appendCountTo(el) {
+      return count => {
+        el.innerText = count;
+      }
+    }
+  </script>
+  <script>
+    (function() {
+      var db = firebase.firestore();
+      var articles = db.collection('articles');
+
+      if (CONFIG.page.isPost) { // Is article page
+        var title = document.querySelector('.post-title').innerText.trim();
+        var doc = articles.doc(title);
+        var increaseCount = CONFIG.hostname === location.hostname;
+        if (localStorage.getItem(title)) {
+          increaseCount = false;
+        } else {
+          // Mark as visited
+          localStorage.setItem(title, true);
+        }
+        getCount(doc, increaseCount).then(appendCountTo(document.querySelector('.firestore-visitors-count')));
+      } else if (CONFIG.page.isHome) { // Is index page
+        var promises = [...document.querySelectorAll('.post-title')].map(element => {
+          var title = element.innerText.trim();
+          var doc = articles.doc(title);
+          return getCount(doc);
+        });
+        Promise.all(promises).then(counts => {
+          var metas = document.querySelectorAll('.firestore-visitors-count');
+          counts.forEach((val, idx) => {
+            appendCountTo(metas[idx])(val);
+          });
+        });
+      }
+    })();
+  </script>
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '4cbd080d4b2b465df30a',
+      clientSecret: '4507a678d41d0feb6f41dd49511d4f2055615453',
+      repo        : 'sdf0822.github.io',
+      owner       : 'sdf0822',
+      admin       : ['sdf0822'],
+      id          : 'ac3db05b45f46f6a12d945d63d4dba1a',
+        language: 'zh-TW',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>yiLin Blog</title>
+  
+  <subtitle>歡迎來到我的部落格。</subtitle>
+  <link href="https://yilin10.tw/atom.xml" rel="self"/>
+  
+  <link href="https://yilin10.tw/"/>
+  <updated>2021-12-08T01:34:59.398Z</updated>
+  <id>https://yilin10.tw/</id>
+  
+  <author>
+    <name>Yi-Lin</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>IOS製作屬於自己的套件庫</title>
+    <link href="https://yilin10.tw/article/55f52a28.html"/>
+    <id>https://yilin10.tw/article/55f52a28.html</id>
+    <published>2021-11-02T20:26:13.000Z</published>
+    <updated>2021-12-08T01:34:59.398Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="https://i.imgur.com/dN53peb.png" alt="Image"></p><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我自己在開發專案時都會有常用的方法與類別，但不同的專案就會需要複製檔案一次，很不方便，所以今天想來製作屬於自己的套件庫！<span id="more"></span></p><h2 id="Swift-Package-Manager"><a href="#Swift-Package-Manager" class="headerlink" title="Swift Package Manager"></a>Swift Package Manager</h2><h3 id="創建-Package"><a href="#創建-Package" class="headerlink" title="創建 Package"></a>創建 Package</h3><p><img src="https://i.imgur.com/AC2Rb2h.png" alt="Image"><img src="https://i.imgur.com/gYc9h8a.png" alt="Image"></p><h3 id="編輯-Package-swift"><a href="#編輯-Package-swift" class="headerlink" title="編輯 Package.swift"></a>編輯 Package.swift</h3><ul><li>在這裡我多加入了 ios 版本 與 swift 的版本 限制<img src="https://i.imgur.com/lo9Xg6i.png" alt="Image"></li></ul><h3 id="放入檔案"><a href="#放入檔案" class="headerlink" title="放入檔案"></a>放入檔案</h3><p>將你的檔案丟進 <code>Sources/套件名</code> 裡(檔案內的類別或方法需加上<strong>public</strong>，不然會無法呼叫到)<img src="https://i.imgur.com/9wGrAwW.png" alt="Image"></p><h3 id="上傳至github"><a href="#上傳至github" class="headerlink" title="上傳至github"></a>上傳至<strong>github</strong></h3><ul><li>然後 push 到 github (專案需公開)，這樣我們就完成了屬於自己的套件包了 👏，以後如果有不錯的程式就可以將它整理到自己的套件裡，好方便自己使用如需將套件包加入 Cocoapods 請繼續往下看</li></ul><h2 id="Cocoapods"><a href="#Cocoapods" class="headerlink" title="Cocoapods"></a>Cocoapods</h2><ul><li>使你的套件可用於 <strong>Cocoapods</strong> 我們需要再加入幾個步驟</li></ul><h3 id="創建podspec檔"><a href="#創建podspec檔" class="headerlink" title="創建podspec檔"></a>創建<strong>podspec</strong>檔</h3><ul><li>在你的套件包加入 <strong><u>套件名.podspec</u></strong></li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Pod::Spec.new do |s|</span><br><span class="line">  s.name             = &#x27;ZYLKit稱&#x27; #套件名稱</span><br><span class="line">  s.version          = &#x27;0.1.0&#x27;  #套件名稱(如更新都需變更版本)</span><br><span class="line">  s.summary          = &#x27;一些好用的方法與封裝元件&#x27; #套件說明</span><br><span class="line">  s.homepage         = &#x27;https://github.com/sdf0822/ZYLKit&#x27; #git URL</span><br><span class="line">  s.license          = &#123; :type =&gt; &#x27;MIT&#x27;, :file =&gt; &#x27;LICENSE&#x27; &#125; #LICENSE(可使用github產生)</span><br><span class="line">  s.author           = &#123; &#x27;yiLin&#x27; =&gt; &#x27;sdf0822@gmail.com&#x27; &#125; #作者</span><br><span class="line">  s.source           = &#123; :git =&gt; &#x27;https://github.com/sdf0822/ZYLKit.git&#x27;, :tag =&gt; s.version &#125;</span><br><span class="line">  s.ios.deployment_target = &#x27;13.0&#x27;</span><br><span class="line">  s.swift_version = &#x27;5.0&#x27;</span><br><span class="line">  s.source_files = &#x27;Sources/ZYLKit/**/*&#x27;</span><br><span class="line">end</span><br></pre></td></tr></table></figure><h3 id="新增版號Tag"><a href="#新增版號Tag" class="headerlink" title="新增版號Tag"></a>新增版號Tag</h3><ul><li>在專案裡新增一個版本號的 <strong>tag</strong> ，要和 podspec version 一樣，發佈到 github</li></ul><p><img src="https://i.imgur.com/KdwzqXO.png" alt="Image"></p><h3 id="檢查是否有錯誤"><a href="#檢查是否有錯誤" class="headerlink" title="檢查是否有錯誤"></a>檢查是否有錯誤</h3><ul><li>完成後 輸入<code>pod spec lint</code> ， 如有錯誤就一一排除</li></ul><p><img src="https://i.imgur.com/U9uCXtj.png" alt="Image"></p><h3 id="檢查-session"><a href="#檢查-session" class="headerlink" title="檢查 session"></a>檢查 session</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod trunk me</span><br></pre></td></tr></table></figure><p><img src="https://i.imgur.com/gyXszo5.png" alt="Image"></p><h3 id="驗證信箱"><a href="#驗證信箱" class="headerlink" title="驗證信箱"></a>驗證信箱</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod trunk register &quot;sdf0822@gmail.com&quot; &#x27;Chuang&#x27; --description=&#x27;imac&#x27;</span><br></pre></td></tr></table></figure><h3 id="把專案推到-trunk"><a href="#把專案推到-trunk" class="headerlink" title="把專案推到 trunk"></a>把專案推到 trunk</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod trunk push ZYLKit.podspec</span><br></pre></td></tr></table></figure><p><img src="https://i.imgur.com/7PprUtG.png" alt="Image"></p><p>這時候就可以去泡杯咖啡，等待官方回信，收到回信就可以使用 cocoapods 導入屬於你自己的套件了 🎉🎉</p><p><img src="https://i.imgur.com/7hXHOBq.png" alt="Image"></p><p><strong>附上我的套件連結</strong> <a href="https://github.com/sdf0822/ZYLKit">github</a></p>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;&lt;img src=&quot;https://i.imgur.com/dN53peb.png&quot; alt=&quot;Image&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;我自己在開發專案時都會有常用的方法與類別，但不同的專案就會需要複製檔案一次，很不方便，所以今天想來製作屬於自己的套件庫！</summary>
+    
+    
+    
+    <category term="IOS" scheme="https://yilin10.tw/categories/IOS/"/>
+    
+    
+    <category term="xcode" scheme="https://yilin10.tw/tags/xcode/"/>
+    
+    <category term="ios" scheme="https://yilin10.tw/tags/ios/"/>
+    
+    <category term="apple" scheme="https://yilin10.tw/tags/apple/"/>
+    
+    <category term="Swift Package Manager" scheme="https://yilin10.tw/tags/Swift-Package-Manager/"/>
+    
+    <category term="spm" scheme="https://yilin10.tw/tags/spm/"/>
+    
+    <category term="cocoapods" scheme="https://yilin10.tw/tags/cocoapods/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>3款好用的IOS開發輔助工具</title>
+    <link href="https://yilin10.tw/article/f03c5f99.html"/>
+    <id>https://yilin10.tw/article/f03c5f99.html</id>
+    <published>2021-09-28T13:15:00.000Z</published>
+    <updated>2021-12-08T01:34:59.398Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="https://i.imgur.com/cXDb6oY.png" alt="Image"></p><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>推薦幾款開發輔助工具，大大提升開發效率！<span id="more"></span></p><h2 id="Go2Shell"><a href="#Go2Shell" class="headerlink" title="Go2Shell"></a>Go2Shell</h2><p><img src="https://i.imgur.com/Kstf8p6.png"></p><ul><li>可以在<strong>Finder</strong>中打開當前位子的<strong>terminal</strong>，這樣在使用<strong>cocoapods</strong>時，就不需要自己在那邊<strong>cd</strong>了。<a href="https://imgur.com/wUpeQTh"><img src="https://i.imgur.com/wUpeQTh.gif" title="source: imgur.com" /></a><a href="https://zipzapmac.com/Go2Shell">下載連結</a></li></ul><h2 id="Paste-JSON-as-Code-•-quicktype"><a href="#Paste-JSON-as-Code-•-quicktype" class="headerlink" title="Paste JSON as Code • quicktype"></a>Paste JSON as Code • quicktype</h2><p><img src="https://i.imgur.com/5ca8HjH.png" alt="Image"></p><ul><li>當你在串接<strong>api</strong>時， 想將<strong>json</strong>轉物件是不是都要一個<strong>key</strong>慢慢打，有了這個軟體就可以一鍵幫你把<strong>json</strong>轉成物件，超方便der。<img src="https://i.imgur.com/fTMQV9S.png" alt="Image"><a href="https://apps.apple.com/tw/app/paste-json-as-code-quicktype/id1330801220?mt=12">下載連結</a></li></ul><h2 id="InjectionIII"><a href="#InjectionIII" class="headerlink" title="InjectionIII"></a>InjectionIII</h2><p><img src="https://i.imgur.com/s5OYTUA.png" alt="Image"></p><ul><li>最後一個也是我最推薦的，當你在製作某個頁面時，可能因為調整某個元件的參數或設定，為了看到調整後的效果，就需再重新<strong>Build</strong>，這樣一來一往當你製作完頁面，但卻也浪費了許多時間。但<strong>InjectionIII</strong>可以在你更改參數時，即時在畫面上做更新達到跟<strong>Flutter</strong>一樣的<strong>熱加載</strong>(Hot reload)。</li></ul><p><a href="https://github.com/johnno1962/InjectionIII/releases/tag/3.1.1">下載連結</a></p><ul><li><p>下面就教大家如何設定你的專案</p></li><li><p>事前準備： </p><ul><li>Xcode: 13.0</li><li>InjectionIII: 3.1.1 (<strong>App Store無效果</strong>)</li></ul></li></ul><h3 id="1-啟動"><a href="#1-啟動" class="headerlink" title="1.啟動"></a>1.啟動</h3><ul><li>開啟<strong>InjectionIII</strong>，然後選擇你的專案路徑</li></ul><h3 id="2-配置"><a href="#2-配置" class="headerlink" title="2.配置"></a>2.配置</h3><ul><li>在<strong>AppDelegate</strong>的<strong>didFinishLaunchingWithOptions</strong>裡加入這段程式碼<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">#if</span> <span class="type">DEBUG</span></span><br><span class="line"><span class="keyword">do</span>&#123;</span><br><span class="line">  <span class="keyword">let</span> injectionBundle <span class="operator">=</span> <span class="type">Bundle</span>.<span class="keyword">init</span>(path: <span class="string">&quot;/Applications/InjectionIII.app/Contents/Resources/iOSInjection.bundle&quot;</span>)</span><br><span class="line">  <span class="keyword">if</span> <span class="keyword">let</span> bundle <span class="operator">=</span> injectionBundle&#123;</span><br><span class="line">    <span class="keyword">try</span> bundle.loadAndReturnError()</span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="built_in">debugPrint</span>(<span class="string">&quot;Injection注入失敗,未能檢測到Injection&quot;</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;<span class="keyword">catch</span>&#123;</span><br><span class="line">  <span class="built_in">debugPrint</span>(<span class="string">&quot;Injection注入失敗<span class="subst">\(error)</span>&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">#endif</span></span><br></pre></td></tr></table></figure></li><li>然後在你需要熱加載的<strong>ViewController</strong>裡加入<strong>Func injected</strong>，這樣就完成配置了🎉，當程式更動時就可以通知頁面執行<strong>ViewDidLoad</strong><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">#if</span> <span class="type">DEBUG</span></span><br><span class="line"><span class="keyword">@objc</span> <span class="function"><span class="keyword">func</span> <span class="title">injected</span>()</span>&#123;</span><br><span class="line">  <span class="keyword">self</span>.viewDidLoad()</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">#endif</span></span><br></pre></td></tr></table></figure>or 如果想讓每個<strong>ViewController</strong>都可以熱加載的話，只需要添加個<strong>extension</strong>就可以了<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">UIViewController</span> </span>&#123;</span><br><span class="line">    <span class="keyword">@objc</span> <span class="function"><span class="keyword">func</span> <span class="title">injected</span>()</span>  &#123;</span><br><span class="line">    <span class="keyword">#if</span> <span class="type">DEBUG</span></span><br><span class="line">        <span class="keyword">self</span>.viewDidLoad()</span><br><span class="line">    <span class="keyword">#endif</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li></ul><p><a href="https://imgur.com/HXzOO0r"><img src="https://i.imgur.com/HXzOO0r.gif" title="source: imgur.com" /></a></p><hr><p>如果喜歡就幫我點個讚吧！😎 </p>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;&lt;img src=&quot;https://i.imgur.com/cXDb6oY.png&quot; alt=&quot;Image&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;推薦幾款開發輔助工具，大大提升開發效率！</summary>
+    
+    
+    
+    <category term="開發工具" scheme="https://yilin10.tw/categories/%E9%96%8B%E7%99%BC%E5%B7%A5%E5%85%B7/"/>
+    
+    
+    <category term="xcode" scheme="https://yilin10.tw/tags/xcode/"/>
+    
+    <category term="ios" scheme="https://yilin10.tw/tags/ios/"/>
+    
+    <category term="Go2Shell" scheme="https://yilin10.tw/tags/Go2Shell/"/>
+    
+    <category term="json" scheme="https://yilin10.tw/tags/json/"/>
+    
+    <category term="Paste JSON as Code • quicktype" scheme="https://yilin10.tw/tags/Paste-JSON-as-Code-%E2%80%A2-quicktype/"/>
+    
+    <category term="InjectionIII" scheme="https://yilin10.tw/tags/InjectionIII/"/>
+    
+    <category term="hotReload" scheme="https://yilin10.tw/tags/hotReload/"/>
+    
+    <category term="熱加載" scheme="https://yilin10.tw/tags/%E7%86%B1%E5%8A%A0%E8%BC%89/"/>
+    
+    <category term="ios熱加載" scheme="https://yilin10.tw/tags/ios%E7%86%B1%E5%8A%A0%E8%BC%89/"/>
+    
+    <category term="apple" scheme="https://yilin10.tw/tags/apple/"/>
+    
+  </entry>
+  
+</feed>
